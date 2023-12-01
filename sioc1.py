@@ -46,6 +46,24 @@ def quadraticInterpolation (X, Y, x1):
             j+=1
     return y1
 
+###interpolacja sześcienna (3-stopnia)
+def cubicInterpolation(X,Y,x1):
+    y1=np.zeros_like(x1)
+    i=0
+    j=0
+    for xi in x1:
+        X3=[X[j]**3, X[j]**2, X[j], 1], [X[j+1]**3, X[j+1]**2, X[j+1], 1], [X[j+2]**3, X[j+2]**2, X[j+2], 1], [X[j+3]**3, X[j+3]**2, X[j+3], 1]
+        Y3=[Y[j], Y[j+1], Y[j+2], Y[j+3]]
+        A = np.linalg.inv(X3) @ Y3
+        y1[i] = A[0]*pow(xi,3) + A[1]*pow(xi,2) + A[2]*xi + A[3]
+        i+=1
+
+        if xi > X[j+3]:
+            j+=1
+
+    return y1
+
+
 
 ###tworzymy nasze tablice, X,Y tworzy wykres sinusa, x1 słuzy do interpolacji
 X = np.linspace(0,5, 10)
@@ -68,5 +86,9 @@ plt.title("Linear interpolation")
 plt.figure()
 plt.plot(x1, quadraticInterpolation(X,Y,x1), "o")
 plt.title("Quadratic interpolation")
+
+plt.figure()
+plt.plot(x1, cubicInterpolation(X,Y,x1), "o")
+plt.title("Cubic interpolation")
 
 plt.show()
